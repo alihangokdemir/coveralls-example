@@ -16,7 +16,6 @@ jobs:
         run: go test -v ./...
       - name: Run coverage
         run: |
-          go test ./... -coverprofile coverage.out
-          go tool cover -html coverage.out -o coverage.html
+          go test ./... -coverprofile lcov.info
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v1
