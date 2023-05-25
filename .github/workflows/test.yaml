@@ -1,0 +1,22 @@
+name: Test and coverage
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '1.20.4'
+      - name: Run tests
+        run: go test -v ./...
+      - name: Run coverage
+        run: |
+          go test ./... -coverprofile coverage.out
+          go tool cover -html coverage.out -o coverage.html
+      - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@v1
