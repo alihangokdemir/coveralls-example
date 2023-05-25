@@ -12,10 +12,12 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: '1.20.4'
-      - name: Run tests
-        run: go test -v ./...
-      - name: Run coverage
+      - name: Run Unit tests
         run: |
-          go test ./... -coverprofile ./coverage/lcov.info
-      - name: Coveralls GitHub Action
-        uses: coverallsapp/github-action@v1
+          go test -race -covermode atomic -coverprofile=covprofile ./...
+      - name: Install goveralls
+        run: go install github.com/mattn/goveralls@latest
+      - name: Send coverage
+        env:
+          COVERALLS_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        run: goveralls -coverprofile=covprofile -service=github
